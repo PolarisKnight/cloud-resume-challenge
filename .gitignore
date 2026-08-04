@@ -1,0 +1,7 @@
+# ignore local build caches
+.terraform/
+
+
+# Ignore state files if any local commands generated them
+*.tfstate
+*.tfstate.*
