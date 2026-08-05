@@ -94,8 +94,8 @@ jobs:
         method: "jwt" # JSON web token is an industry-standard signed digital ID card for GH Actions
         role: "github-actions"
         secrets: |
-          secret/terraform/aws | AWS_ACCESS_KEY_ID ;
-          secret/terraform/aws | AWS_SECRET_ACCESS_KEY
+          secret/terraform/aws access_key | AWS_ACCESS_KEY_ID ;
+          secret/terraform/aws secret_key | AWS_SECRET_ACCESS_KEY
     # Initialize a new or existing hosting Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform init
