@@ -1,6 +1,7 @@
 name: Terraform Destroy
 
 # Dispatch means it requires manual confirmation to destroy the resource
+# confirm_destroy forces a confirmation before applying
 on:
   workflow_dispatch:
     inputs:
