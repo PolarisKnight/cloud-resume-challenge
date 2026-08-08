@@ -86,7 +86,7 @@ jobs:
       uses: hashicorp/setup-terraform@v3
 
 
-    # Fetch Aws secrets from Vault
+    # Fetch AWS secrets from Vault
     - name: Import secrets from Vault
       uses: hashicorp/vault-action@v3
       with:
