@@ -49,11 +49,24 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Choose action to execute"
+        type: choice
+        options:
+          - apply
+          - destroy
 
 permissions:
   contents: read
   pull-requests: write 
   id-token: write # allows Vault OIDC
+
+  # Ensures only one apply/destroy job can run at a given time
+concurrency:
+  group: terraform-state-lock
+  cancel-in-progress: false
 
 jobs:
   terraform:
@@ -107,11 +120,22 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
+      if: github.event_name == 'push' || github.event_name == 'pull_request' || inputs.action == 'apply'
       run: terraform plan -input=false
 
       # On push to "main", build or change infrastructure according to Terraform configuration files
       # # Only run "Terraform Apply" when it is pushed to main (this includes merging)
       # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Apply
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push' 
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push' || inputs.action == 'apply'
       run: terraform apply -auto-approve -input=false
+
+    # Destroy Job
+    - name: Terraform Destroy Plan
+      if: github.event_name == 'workflow_dispatch' && inputs.action == 'destroy'
+      run: terraform plan -destroy
+
+
+    - name: Terraform Destroy
+      if: github.event_name == 'workflow_dispatch' && inputs.action == 'destroy'
+      run: terraform destroy -auto-approve
