@@ -50,6 +50,13 @@ jobs:
     - name: Terraform init
       run: terraform init
 
+    - name: Terraform Format
+      run: terraform fmt && terraform fmt -check
+
+    - name: Terraform plan
+      run: terraform plan
+
+
     - name: Terraform Destroy
-      if: ${{ inputs.confirm_destroy == 'destroy' }}
+      if: inputs.confirm_destroy == 'destroy' && github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: terraform destroy -auto-approve -input=false
