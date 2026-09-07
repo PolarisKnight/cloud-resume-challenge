@@ -40,7 +40,7 @@
 #     - name: Setup Terraform
 #       uses: hashicorp/setup-terraform@v1
 #       with:
-#         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+#         cli_config_credentials_token: $ {{ secrets.TF_API_TOKEN }}w
 
 name: 'Terraform'
 
@@ -59,9 +59,9 @@ on:
           - destroy
 
 permissions:
-  contents: read
-  pull-requests: write 
-  id-token: write # allows Vault OIDC
+  contents: read # allows reading of repo contents
+  pull-requests: write # can modify pull requests
+  id-token: write # allows Vault OIDC if wanted
 
   # Ensures only one apply/destroy job can run at a given time
 concurrency:
@@ -100,15 +100,15 @@ jobs:
 
 
     # Fetch AWS secrets from Vault
-    - name: Import secrets from Vault
+    - name: Import secrets from Vault over Tailnet
       uses: hashicorp/vault-action@v3
       with:
         # vault node/IP
         url: https://vault.waifuprotect.org
         method: "jwt" # JSON web token is an industry-standard signed digital ID card for GH Actions
-        role: "github-actions"
-        secrets: |
-          secret/data/terraform/aws AWS_ACCESS_KEY_ID | AWS_ACCESS_KEY_ID ;
+        role: "github-actions" # bound claim in role secures it even more
+        secrets: | # Maps vault value to value inside the workflow
+          secret/data/terraform/aws AWS_ACCESS_KEY_ID | AWS_ACCESS_KEY_ID ;  
           secret/data/terraform/aws AWS_SECRET_ACCESS_KEY | AWS_SECRET_ACCESS_KEY
     # Initialize a new or existing hosting Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
