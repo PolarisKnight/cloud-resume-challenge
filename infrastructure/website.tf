@@ -91,6 +91,7 @@ resource "aws_cloudfront_distribution" "s3_distrbution" {
 viewer_certificate {
   acm_certificate_arn = aws_acm_certificate_validation.crc_site_validation.certificate_arn # references the returned arn from the validation block
   ssl_support_method = "sni-only" # server name indication; free
+  minimum_protocol_version = "TLSv1.2_2021" # browsers may complain if minimum is not set to TLS 1.2 or later.
 
 
 }
