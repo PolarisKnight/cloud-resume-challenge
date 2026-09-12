@@ -20,10 +20,10 @@ resource "aws_route53_zone" "braydontiffany" {
 # Validation Record
 resource "aws_route53_record" "validation-record" {
   zone_id = aws_route53_zone.braydontiffany.zone_id
-  name = aws_acm_certificate.crc_site_certificate.domain_validation_options.resource_record_name # record name
+  name = aws_acm_certificate.crc_site_certificate.domain_validation_options[0].resource_record_name # record name
   type = "CNAME"
   ttl = "300"
-  records = [aws_acm_certificate.crc_site_certificate.domain_validation_options.resource_record_value] # is in list format
+  records = [aws_acm_certificate.crc_site_certificate.domain_validation_options[0].resource_record_value] # is in list format
 }
 
 
