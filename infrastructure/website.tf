@@ -88,6 +88,9 @@ resource "aws_cloudfront_distribution" "s3_distrbution" {
 
       }
     }
+    aliases = [local.my_domain] # adding braydontiffany.com as a domain that will resolve to the site with TLS
+    price_class = "PriceClass_100"
+
 viewer_certificate {
   acm_certificate_arn = aws_acm_certificate_validation.crc_site_validation.certificate_arn # references the returned arn from the validation block
   ssl_support_method = "sni-only" # server name indication; free
