@@ -44,6 +44,7 @@ resource "aws_acm_certificate" "crc_site_certificate" {
 resource "aws_acm_certificate_validation" "crc_site_validation" {
     certificate_arn = aws_acm_certificate.crc_site_certificate.arn
     validation_record_fqdns = [aws_route53_record.validation-record.fqdn] # list of fqdns that implement the validation
+    region = "us-east-1"
 
 }
 
