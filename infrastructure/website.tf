@@ -88,7 +88,7 @@ resource "aws_cloudfront_distribution" "s3_distrbution" {
 
       }
     }
-    aliases = [local.my_domain] # adding braydontiffany.com as a domain that will resolve to the site with TLS
+    aliases = [local.my_domain, "www.${local.my_domain}"] # adding braydontiffany.com as a domain that will resolve to the site with TLS
     price_class = "PriceClass_100"
 
 viewer_certificate {

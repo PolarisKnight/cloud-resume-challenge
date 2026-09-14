@@ -62,3 +62,11 @@ resource "aws_route53_record" "cloudfront-alias" {
       evaluate_target_health = "false"
     }
 }
+resource "aws_route53_record" "www" {
+    zone_id = aws_route53_zone.braydontiffany.zone_id
+    name = "www.braydontiffany.com"
+    type = "CNAME"
+    ttl = "300"
+    records = ["braydontiffany.com"]
+
+}
