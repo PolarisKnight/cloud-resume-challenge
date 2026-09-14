@@ -19,18 +19,25 @@ resource "aws_route53_zone" "braydontiffany" {
 
 # Validation Record
 resource "aws_route53_record" "validation-record" {
+  for_each = {
+    for dvo in aws_acm_certificate.crc_site_certificate.domain_validation_options: dvo.domain_name => dvo
+    }
   zone_id = aws_route53_zone.braydontiffany.zone_id
-  name = tolist(aws_acm_certificate.crc_site_certificate.domain_validation_options)[0].resource_record_name # record name
-  type = "CNAME"
+  name = each.value.resource_record_name
+  type = each.value.resource_record_type
+  records = [each.value.resource_record_value] 
   ttl = "300"
-  records = [tolist(aws_acm_certificate.crc_site_certificate.domain_validation_options)[0].resource_record_value] # tolist makes it list format
 }
 
 
 resource "aws_acm_certificate" "crc_site_certificate" {
     domain_name = "braydontiffany.com"
+    subject_alternative_names = ["www.${local.my_domain}"]
     validation_method = "DNS" # DNS or EMAIL are valid
     region = "us-east-1" # us-east-1 required to use with CloudFront
+    lifecycle {
+      create_before_destroy = true # stand up new before destroying old
+    }
 
     tags = {
         Name = "crc_certificate"
@@ -43,7 +50,7 @@ resource "aws_acm_certificate" "crc_site_certificate" {
 # Not an actual AWS Resource; waits for the cert to be validated before using it
 resource "aws_acm_certificate_validation" "crc_site_validation" {
     certificate_arn = aws_acm_certificate.crc_site_certificate.arn
-    validation_record_fqdns = [aws_route53_record.validation-record.fqdn] # list of fqdns that implement the validation
+    validation_record_fqdns = [for record in aws_route53_record.validation-record : record.fqdn] # list of fqdns that implement the validation
     region = "us-east-1"
 
 }
