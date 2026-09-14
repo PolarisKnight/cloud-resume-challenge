@@ -50,7 +50,7 @@ resource "aws_acm_certificate" "crc_site_certificate" {
 # Not an actual AWS Resource; waits for the cert to be validated before using it
 resource "aws_acm_certificate_validation" "crc_site_validation" {
     certificate_arn = aws_acm_certificate.crc_site_certificate.arn
-    validation_record_fqdns = [for record in aws_route53_record.validation-record.fqdn : record.fqdn] # list of fqdns that implement the validation
+    validation_record_fqdns = [for record in aws_route53_record.validation-record : record.fqdn] # list of fqdns that implement the validation
     region = "us-east-1"
 
 }
