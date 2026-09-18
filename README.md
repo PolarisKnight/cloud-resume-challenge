@@ -16,9 +16,9 @@ The Cloud Resume Challenge was initially created in 2020 by Forrest Brazeal and 
 
 
 
-## My Experience with the Challenge
+## Some Technical Decisions
 
-> This is general overview of how I decided to tackle this project. Because one of the requirements is to actually make a blog post about it, I will keep this section somewhat short. This README will be updated with a link to the blog post once completed on dev.to.
+> This is a brief technical overview of what I decided for this project. For more on my experience, please check out my [blog post](https://dev.to/polarisknight/cloud-resume-challenge-building-a-cloud-native-portfolio-k25) on dev.to. 
 
 When it comes to the challenge, it may be completed in many different ways. Some may do the bare minimum, while others see it more as an ongoing portfolio project that they want to perfect. I lean more toward the latter. For me, doing everything "by the book" with the infrastructure was a little insufficient for what I wanted to do. Luckily, veering off a little bit is not against the "rules" at all!
 
